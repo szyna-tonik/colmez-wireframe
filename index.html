@@ -113,11 +113,17 @@ h3 { font-size: clamp(20px, 2.2vw, 30px); line-height: 1.15; letter-spacing: -0.
 
 /* ---------- 01 · Hero ---------- */
 
-.hero .cta-row { margin-bottom: clamp(48px, 6vw, 88px); }
+/* Hero paces itself against viewport HEIGHT so nav + copy + map land on
+   one screen. The map iframe renders at the full design width and is
+   scaled down (JS sets transform) to the height left under the copy —
+   so the drawing AND the type inside it scale together on small desktops,
+   and big screens get the full-size map back (scale 1). */
+.hero { padding-top: clamp(32px, 4.5vh, 96px); padding-bottom: clamp(20px, 3vh, 96px); }
+.hero .cta-row { margin-bottom: clamp(28px, 4vh, 72px); }
 
 .map-embed iframe { display: block; width: 100%;
-                    height: clamp(380px, 46vw, 640px);
                     border: 0; background: transparent;
+                    transform-origin: top center;
                     /* the map runs its own auto tour — no pointer interaction,
                        so scroll over the map stays with the page */
                     pointer-events: none; }
@@ -314,6 +320,7 @@ h3 { font-size: clamp(20px, 2.2vw, 30px); line-height: 1.15; letter-spacing: -0.
 /* ---------- Responsive ---------- */
 
 @media (max-width: 768px) {
+  .map-embed iframe { height: clamp(300px, 88vw, 420px); transform: none; }
   .hs-top { flex-direction: column; align-items: flex-start; gap: 8px; padding-top: 0; }
   .hs-count, .hs-headings { display: none; }
   .hs-panels { display: block; margin-top: clamp(24px, 6vw, 40px); padding: 0; }
@@ -570,6 +577,29 @@ h3 { font-size: clamp(20px, 2.2vw, 30px); line-height: 1.15; letter-spacing: -0.
   }, { rootMargin: '-64px 0px 0px 0px' }).observe(hero);
 
   /* Reveal — one-shot, first block of every section */
+  /* Hero map — the iframe keeps the full design width (so the drawing and
+     its type keep their proportions) and scales down as one to fit the
+     height left under the copy. Scale 1 on screens tall enough. */
+  var embed = document.querySelector('.map-embed');
+  if (embed) {
+    var mfr = embed.querySelector('iframe');
+    var fitMap = function () {
+      if (!mq.matches) { mfr.style.width = ''; mfr.style.height = ''; mfr.style.transform = ''; embed.style.height = ''; return; }
+      var w = embed.clientWidth;
+      if (!w) return;
+      var h = Math.round(w * 0.472); // the drawn map is width-fit at ~1:0.472
+      var topDoc = embed.getBoundingClientRect().top + window.scrollY;
+      var avail = window.innerHeight - topDoc - 24;
+      var k = Math.max(0.45, Math.min(1, avail / h));
+      mfr.style.width = w + 'px';
+      mfr.style.height = h + 'px';
+      mfr.style.transform = 'scale(' + k + ')';
+      embed.style.height = Math.round(h * k) + 'px';
+    };
+    fitMap();
+    window.addEventListener('resize', fitMap, { passive: true });
+  }
+
   var rio = new IntersectionObserver(function (entries) {
     entries.forEach(function (e) {
       if (e.isIntersecting) { e.target.classList.add('in'); rio.unobserve(e.target); }
