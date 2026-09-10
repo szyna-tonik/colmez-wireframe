@@ -43,6 +43,13 @@
   --sans: system-ui, sans-serif;      /* Overused Grotesk in design */
   --eyebrow: ui-monospace, monospace; /* Mono role */
   --gold: #ae9a29;                    /* Industrial Gold — wireframe annotations + asset callouts (same on both schemes) */
+
+  /* Flattened wireframe type scale — three text sizes + one mono meta size.
+     Hierarchy comes from placement and colour, not scale jumps. */
+  --t-1: clamp(28px, 3vw, 42px);   /* statements: h1, h2, .display */
+  --t-2: clamp(18px, 1.7vw, 24px); /* block heads: h3, quote, figures */
+  --t-3: 15px;                     /* body: lead, copy, bullets, names */
+  --t-mono: 11px;                  /* all mono labels and notes */
 }
 
 /* ---------- Section scheme helper ----------
@@ -83,34 +90,31 @@ section { padding: var(--sp) 0; position: relative; }
 
 /* ---------- Type scale ---------- */
 
-.kicker { font-family: var(--eyebrow); font-size: 13px; letter-spacing: 0.09em;
+.kicker { font-family: var(--eyebrow); font-size: var(--t-mono); letter-spacing: 0.09em;
           text-transform: uppercase; color: var(--s-label); margin: 0 0 20px; }
 /* Wireframe annotation sitting beside each eyebrow, in brand gold */
 .eyebrow-note { color: var(--gold); text-transform: none; letter-spacing: 0.02em;
-                font-size: 10px; margin-left: 10px; }
+                font-size: var(--t-mono); margin-left: 10px; }
 
-h1 { font-size: clamp(36px, 5.6vw, 68px); line-height: 1.02; letter-spacing: -0.035em;
-     font-weight: 500; max-width: 18ch; text-wrap: balance; margin: 0 0 28px; }
-
-.display { font-family: var(--sans); font-size: clamp(38px, 6.4vw, 88px);
-           line-height: 1.06; letter-spacing: -0.035em; font-weight: 500; }
+h1, h2, .display { font-size: var(--t-1); line-height: 1.15; letter-spacing: -0.02em;
+                   font-weight: 500; }
+h1 { max-width: 24ch; text-wrap: balance; margin: 0 0 28px; }
+.display { font-family: var(--sans); }
 sup { font-size: .42em; vertical-align: super; letter-spacing: .02em; }
+h2 { max-width: 28ch; text-wrap: balance; margin: 0 0 24px; }
 
-h2 { font-size: clamp(26px, 3.6vw, 46px); line-height: 1.05; letter-spacing: -0.03em;
-     font-weight: 500; max-width: 24ch; text-wrap: balance; margin: 0 0 24px; }
+h3 { font-size: var(--t-2); line-height: 1.3; letter-spacing: -0.015em;
+     font-weight: 500; margin: 0 0 14px; max-width: 34ch; text-wrap: balance; }
 
-h3 { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -0.025em;
-     font-weight: 500; margin: 0 0 16px; max-width: 26ch; text-wrap: balance; }
+.lead { font-size: var(--t-3); line-height: 1.55; color: var(--s-text);
+        max-width: 54ch; margin: 0 0 28px; }
 
-.lead { font-size: clamp(17px, 1.6vw, 21px); line-height: 1.45; letter-spacing: -0.015em;
-        color: var(--s-text); max-width: 54ch; margin: 0 0 32px; }
+.copy { font-size: var(--t-3); line-height: 1.55; color: var(--s-copy); max-width: 48ch; margin: 0; }
 
-.copy { font-size: 15px; line-height: 1.55; color: var(--s-copy); max-width: 48ch; margin: 0; }
-
-.label { font-family: var(--eyebrow); font-size: 13px; letter-spacing: 0.05em;
+.label { font-family: var(--eyebrow); font-size: var(--t-mono); letter-spacing: 0.05em;
          color: var(--s-label); margin: 0 0 10px; }
 
-.label-sm { font-family: var(--eyebrow); font-size: 11px; letter-spacing: 0.08em;
+.label-sm { font-family: var(--eyebrow); font-size: var(--t-mono); letter-spacing: 0.08em;
             text-transform: uppercase; color: var(--s-label-dim); }
 
 .btn { display: inline-flex; align-items: center; height: 42px; padding: 0 18px;
@@ -128,7 +132,7 @@ h3 { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -0.
 .viz { border: var(--s-dash); background: var(--s-panel);
        display: grid; place-items: center; text-align: center;
        padding: clamp(16px, 2vw, 32px);
-       font-family: var(--eyebrow); font-size: 12px; letter-spacing: 0.05em;
+       font-family: var(--eyebrow); font-size: var(--t-mono); letter-spacing: 0.05em;
        color: var(--s-label-dim); line-height: 1.9; }
 
 /* Slide 15 contour hint — concentric rings tinted from currentColor, so the
@@ -144,7 +148,7 @@ h3 { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -0.
 /* Asset callouts (slide 15 / slide 18) — brand gold so the visual direction
    reads at a glance, not buried in placeholder grey */
 .bg-note { position: absolute; top: 18px; right: var(--gutter); z-index: 2;
-           font-family: var(--eyebrow); font-size: 10px; letter-spacing: 0.08em;
+           font-family: var(--eyebrow); font-size: var(--t-mono); letter-spacing: 0.08em;
            text-transform: uppercase;
            color: var(--gold); text-align: right; }
 
@@ -192,8 +196,9 @@ h3 { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -0.
 
 /* ---------- 04 · Mission line ---------- */
 
-.mission-stage { min-height: 60vh; display: grid; place-items: center; }
-.mission-stage .display { text-align: center; max-width: 18ch; margin: 0 auto; }
+.mission { padding: clamp(64px, 6vw, 112px) 0; }
+.mission-stage { min-height: 32vh; display: grid; place-items: center; }
+.mission-stage .display { text-align: center; margin: 0 auto; }
 
 /* ---------- 05 · The seam — platform + product map ---------- */
 
@@ -203,9 +208,8 @@ h3 { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -0.
 .seam-head h2 { margin: 0; }
 .seam-head .lead { margin: 0; }
 /* Closing line of the seam — the product half begins */
-.seam-close { margin: clamp(28px, 3.5vw, 48px) 0 0; max-width: 40ch;
-              font-size: clamp(17px, 1.6vw, 21px); line-height: 1.4;
-              letter-spacing: -0.015em; color: var(--s-text); }
+.seam-close { margin: clamp(28px, 3.5vw, 48px) 0 0; max-width: 48ch;
+              font-size: var(--t-3); line-height: 1.55; color: var(--s-text); }
 
 /* Product map sketch — the capture-rate heatmap (screenshot 2), abstracted */
 .pmap { position: relative; border: var(--s-dash);
@@ -218,7 +222,7 @@ h3 { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -0.
                     background: linear-gradient(90deg,
                       color-mix(in srgb, var(--s-ink) 12%, transparent), var(--s-hot)); }
 .bub { position: absolute; border-radius: 50%; display: grid; place-items: center;
-       font-family: var(--eyebrow); font-size: 11px; letter-spacing: 0.04em; }
+       font-family: var(--eyebrow); font-size: var(--t-mono); letter-spacing: 0.04em; }
 .bub--hi { background: color-mix(in srgb, currentColor 16%, transparent);
            border: 1px solid color-mix(in srgb, currentColor 55%, transparent); color: var(--s-ink); }
 .bub--lo { background: color-mix(in srgb, currentColor 6%, transparent);
@@ -235,14 +239,14 @@ h3 { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -0.
 .cap-text .copy { max-width: 44ch; }
 .cap-bullets { list-style: none; margin: 26px 0 0; padding: 0; }
 .cap-bullets li { border-top: 1px solid var(--s-line-soft); padding: 12px 0;
-                  font-size: 14px; color: var(--s-copy); display: flex; gap: 12px; }
+                  font-size: var(--t-3); color: var(--s-copy); display: flex; gap: 12px; }
 .cap-bullets li::before { content: "—"; color: var(--s-label-dim); flex: none; }
 
 /* UI fragment sketches — cleaned product fragments, re-set in brand */
 .sk { display: flex; flex-direction: column; gap: 12px;
       border: var(--s-dash); background: var(--s-panel); color: var(--s-label-dim);
       padding: clamp(16px, 2vw, 26px); }
-.sk-tag { font-family: var(--eyebrow); font-size: 10px; letter-spacing: 0.08em;
+.sk-tag { font-family: var(--eyebrow); font-size: var(--t-mono); letter-spacing: 0.08em;
           text-transform: uppercase; color: var(--s-label-dim); }
 .sk-title { margin-bottom: 6px; color: var(--s-label); }
 .sk-bar { display: block; height: 8px;
@@ -268,14 +272,14 @@ h3 { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -0.
 .sk-tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .sk-tile { border: 1px solid var(--s-line-soft); padding: 14px;
            display: flex; flex-direction: column; gap: 10px; }
-.sk-fig { font-size: clamp(20px, 1.8vw, 26px); font-weight: 500; letter-spacing: -0.02em;
+.sk-fig { font-size: var(--t-2); font-weight: 500; letter-spacing: -0.015em;
           color: var(--s-ink); }
 
 /* table rows (06·03) */
 .sk-cells { display: flex; align-items: center; gap: 14px;
             border-top: 1px solid var(--s-line-soft); padding: 11px 0; }
 .sk-cells:first-of-type { border-top: 0; }
-.sk-chip { font-family: var(--eyebrow); font-size: 10px; letter-spacing: 0.06em;
+.sk-chip { font-family: var(--eyebrow); font-size: var(--t-mono); letter-spacing: 0.06em;
            text-transform: uppercase; color: var(--s-label); border: 1px solid var(--s-line);
            padding: 3px 8px; margin-left: auto; flex: none; }
 .sk-chip.hot { color: var(--s-bg); background: var(--s-hot); border-color: var(--s-hot); }
@@ -290,7 +294,7 @@ h3 { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -0.
 .kpi-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
            gap: clamp(24px, 3vw, 56px); margin-top: clamp(40px, 5vw, 64px); }
 .kpi { border-top: 1px solid var(--s-line); padding-top: 20px; }
-.kpi .display { font-size: clamp(34px, 4.6vw, 72px); color: var(--s-ink); }
+.kpi .display { color: var(--s-ink); }
 .kpi .label-sm { display: block; margin-top: 10px; }
 .kpi-note { margin-top: clamp(24px, 3vw, 40px); }
 
@@ -302,7 +306,7 @@ h3 { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -0.
 .own-badge { flex: none; width: 84px; height: 84px; border-radius: 50%;
              border: var(--s-dash); background: var(--s-panel);
              display: grid; place-items: center;
-             font-family: var(--eyebrow); font-size: 10px; letter-spacing: 0.08em;
+             font-family: var(--eyebrow); font-size: var(--t-mono); letter-spacing: 0.08em;
              color: var(--s-label-dim); text-align: center; }
 .own h3 { margin: 0 0 10px; }
 .own .copy { max-width: 56ch; }
@@ -314,23 +318,23 @@ h3 { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -0.
          grid-template-columns: clamp(150px, 16vw, 220px) minmax(0, 1fr);
          gap: clamp(24px, 3.5vw, 56px); align-items: center; }
 .quote-photo { min-height: 0; aspect-ratio: 3 / 4; padding: 0; }
-.quote blockquote { margin: 0 0 20px; font-size: clamp(21px, 2.3vw, 32px);
-                    line-height: 1.25; letter-spacing: -0.02em; font-weight: 500;
-                    max-width: 34ch; text-wrap: balance; }
+.quote blockquote { margin: 0 0 20px; font-size: var(--t-2);
+                    line-height: 1.4; letter-spacing: -0.015em; font-weight: 500;
+                    max-width: 48ch; text-wrap: balance; }
 .team-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
              gap: clamp(20px, 2.5vw, 40px); margin-top: clamp(48px, 6vw, 80px); }
 .viz--photo { aspect-ratio: 3 / 4; }
-.member-name { font-size: clamp(15px, 1.3vw, 18px); font-weight: 500;
+.member-name { font-size: var(--t-3); font-weight: 500;
                letter-spacing: -0.01em; margin: 14px 0 4px; }
-.member-line { font-size: 13px; line-height: 1.45; color: var(--s-muted); margin: 0; }
+.member-line { font-size: var(--t-3); line-height: 1.5; color: var(--s-muted); margin: 0; }
 /* ---------- 10 · Close and footer ---------- */
 
-.close { padding-bottom: 28px; }
-.close-stage { min-height: 52vh; display: grid; place-items: center; text-align: center; }
-.close-stage .display { max-width: 16ch; margin: 0 auto; }
+.close { padding: clamp(64px, 6vw, 112px) 0 28px; }
+.close-stage { min-height: 32vh; display: grid; place-items: center; text-align: center; }
+.close-stage .display { margin: 0 auto; }
 .close-cta { justify-content: center; margin-top: clamp(28px, 4vw, 44px); }
-.foot-in { margin-top: var(--sp); border-top: 1px solid var(--s-line-soft);
-           padding-top: 20px; font-size: 12px; color: var(--s-muted);
+.foot-in { margin-top: clamp(56px, 6vw, 104px); border-top: 1px solid var(--s-line-soft);
+           padding-top: 20px; font-size: var(--t-mono); color: var(--s-muted);
            display: flex; flex-wrap: wrap; gap: 8px 18px; }
 
 /* ---------- Interactions, desktop only ---------- */
@@ -363,6 +367,8 @@ h3 { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -0.
   .team-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .bg-note { position: static; display: block; padding: 12px var(--gutter) 0; text-align: left; }
   .hero-traction { white-space: normal; text-align: left; }
+  /* the fixed two-line breaks are a desktop measure — wrap naturally on mobile */
+  .mission-stage .display br, .close-stage .display br { display: none; }
 }
 </style>
 </head>
@@ -436,7 +442,7 @@ h3 { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -0.
   <span class="bg-note">SPARSE CONTOURS — SLIDE 15</span>
   <div class="wrap">
     <div class="mission-stage reveal-up">
-      <p class="display">America's hazardous waste infrastructure is broken. We're fixing it.</p>
+      <p class="display">America's hazardous waste infrastructure is broken.<br>We're fixing it.</p>
     </div>
   </div>
 </section>
@@ -651,7 +657,7 @@ h3 { font-size: clamp(22px, 2.6vw, 34px); line-height: 1.12; letter-spacing: -0.
   <div class="wrap">
     <div class="close-stage reveal-up">
       <div>
-        <p class="display">Powering revenue for the operators America depends on.</p>
+        <p class="display">Powering revenue for the operators<br>America depends on.</p>
         <div class="cta-row close-cta">
           <a class="btn" href="#">Request a demo</a>
         </div>
